@@ -1,0 +1,91 @@
+{
+  "_embedded": {
+    "policy_versions": [
+      {
+        "sev5_grace_period": 0,
+        "sev4_grace_period": 0,
+        "sev3_grace_period": 0,
+        "sev2_grace_period": 0,
+        "sev1_grace_period": 0,
+        "sev0_grace_period": 0,
+        "score_grace_period": 0,
+        "sca_blacklist_grace_period": 5,
+        "guid": "98a42e99-98fc-4f40-af7f-53e3aa70b352",
+        "name": "demo",
+        "type": "CUSTOMER",
+        "description": "demo",
+        "version": 1,
+        "scan_frequency_rules": [
+          {
+            "scan_type": "ANY",
+            "frequency": "ONCE"
+          }
+        ],
+        "finding_rules": [
+          {
+            "type": "BLACKLIST",
+            "scan_type": [
+              "SCA"
+            ],
+            "value": "90337",
+            "coordinates": []
+          },
+          {
+            "advanced_options": {
+              "allowed_nonoss_licenses": true,
+              "allowed_unrecognized_licenses": true,
+              "all_licenses_must_meet_requirement": true,
+              "is_blocklist": true,
+              "selected_licenses": [
+                {
+                  "spdx_id": "AGPL-3.0"
+                },
+                {
+                  "spdx_id": "AGPL-3.0-or-later"
+                }
+              ]
+            },
+            "type": "LICENSE_RISK",
+            "scan_type": [
+              "SCA"
+            ],
+            "value": "4",
+            "coordinates": []
+          }
+        ],
+        "vendor_policy": false,
+        "custom_severities": [
+          {
+            "cwe": 79,
+            "severity": 4
+          }
+        ],
+        "created": "2022-05-20T17:26:46.000Z",
+        "modified_by": "verainternal_jmok",
+        "category": "APPLICATION",
+        "organization_id": 90337,
+        "_links": {
+          "self": {
+            "href": "https://api.veracode.com/appsec/v1/policies/98a42e99-98fc-4f40-af7f-53e3aa70b352/versions/1"
+          }
+        },
+        "capabilities": []
+      }
+    ]
+  },
+  "_links": {
+    "self": {
+      "href": "https://api.veracode.com/appsec/v1/policies/?public_policy\u003dtrue\u0026name\u003ddemo{\u0026page,size,org,vendor_policy,legacy_policy_id,name_exact,category}",
+      "templated": true
+    }
+  },
+  "page": {
+    "size": 20,
+    "total_elements": 1,
+    "total_pages": 1,
+    "number": 0
+  },
+  "capabilities": [
+    "edit_policy"
+  ]
+}

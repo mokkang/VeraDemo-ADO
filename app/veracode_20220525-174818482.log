@@ -1,0 +1,45 @@
+     [java] Executing '/Library/Java/JavaVirtualMachines/temurin-17.jdk/Contents/Home/bin/java' with arguments:
+'-jar'
+'/Users/jmok/VeracodeJavaAPI.jar'
+'-action'
+'UploadAndScan'
+'-vid'
+'dd8a37f63ef2ecdbdf6e806195007d0f'
+'-vkey'
+'ef67607ffd6ffad6e62382862d681b4cdb48aba354b16d57329c34a3cc912b3f9528c9b3423e5caa350496b52e5873629ab67137745523d7a609b31f4feb5952'
+'-criticality'
+'VeryHigh'
+'-createprofile'
+'true'
+'-version'
+'20220525-174818482'
+'-appname'
+'sca-verademo'
+'-filepath'
+'//Users//jmok//DEMO-JAVA//verademo//app//target//verademo.war'
+
+The ' characters around the executable and arguments are
+not part of the command.
+     [java] [2022.05.25 17:48:18.793] Invalid input
+     [java] VeracodeJavaAPI v22.3.9.4 c17.0.2
+     [java] 
+     [java] Parsing error(s):
+     [java]   -filepath does not represent a valid path.
+     [java] 
+     [java] The following parameters are optional for the selected action:
+     [java]   -autorecreate                    -autoscan
+     [java]   -createsandbox                   -deleteincompletescan
+     [java]   -exclude                         -format
+     [java]   -include                         -inputfilepath
+     [java]   -logfilepath                     -maxretrycount
+     [java]   -pattern                         -phost
+     [java]   -ppassword                       -pport
+     [java]   -puser                           -replacement
+     [java]   -sandboxid                       -sandboxname
+     [java]   -scanallnonfataltoplevelmodules  -scanpollinginterval
+     [java]   -scantimeout                     -selected
+     [java]   -selectedpreviously              -teams
+     [java]   -toplevel                       
+     [java] 
+     [java] Java Result: 1
+UploadAndScan:  duration 0 seconds

@@ -1,0 +1,96 @@
+{
+  "_embedded": {
+    "policy_versions": [
+      {
+        "sev5_grace_period": 0,
+        "sev4_grace_period": 0,
+        "sev3_grace_period": 0,
+        "sev2_grace_period": 0,
+        "sev1_grace_period": 0,
+        "sev0_grace_period": 0,
+        "score_grace_period": 0,
+        "sca_blacklist_grace_period": 0,
+        "guid": "40a3a567-430c-4cdb-8170-d28eb863292f",
+        "name": "verademo-pipeline",
+        "type": "CUSTOMER",
+        "description": "pipeline custom medium security setting",
+        "version": 1,
+        "scan_frequency_rules": [
+          {
+            "scan_type": "ANY",
+            "frequency": "ONCE"
+          }
+        ],
+        "finding_rules": [
+          {
+            "type": "SECURITY_STANDARD",
+            "scan_type": [
+              "MANUAL",
+              "STATIC",
+              "DYNAMIC"
+            ],
+            "value": "owasp",
+            "coordinates": []
+          },
+          {
+            "type": "SECURITY_STANDARD",
+            "scan_type": [
+              "MANUAL",
+              "STATIC",
+              "DYNAMIC"
+            ],
+            "value": "cwe_2020",
+            "coordinates": []
+          },
+          {
+            "type": "SECURITY_STANDARD",
+            "scan_type": [
+              "MANUAL",
+              "STATIC",
+              "DYNAMIC"
+            ],
+            "value": "cert",
+            "coordinates": []
+          },
+          {
+            "type": "SECURITY_STANDARD",
+            "scan_type": [
+              "MANUAL",
+              "STATIC",
+              "DYNAMIC"
+            ],
+            "value": "cwe_veracode",
+            "coordinates": []
+          }
+        ],
+        "vendor_policy": false,
+        "custom_severities": [],
+        "created": "2022-06-03T11:51:37.000Z",
+        "modified_by": "verainternal_jmok",
+        "category": "APPLICATION",
+        "organization_id": 90337,
+        "_links": {
+          "self": {
+            "href": "https://api.veracode.com/appsec/v1/policies/40a3a567-430c-4cdb-8170-d28eb863292f/versions/1"
+          }
+        },
+        "capabilities": []
+      }
+    ]
+  },
+  "_links": {
+    "self": {
+      "href": "https://api.veracode.com/appsec/v1/policies/?public_policy\u003dtrue\u0026name\u003dverademo-pipeline{\u0026page,size,org,vendor_policy,legacy_policy_id,name_exact,category}",
+      "templated": true
+    }
+  },
+  "page": {
+    "size": 20,
+    "total_elements": 1,
+    "total_pages": 1,
+    "number": 0
+  },
+  "capabilities": [
+    "edit_policy"
+  ]
+}
