@@ -1,0 +1,41 @@
+     [java] Executing '/usr/local/Cellar/openjdk/18.0.1/libexec/openjdk.jdk/Contents/Home/bin/java' with arguments:
+'-jar'
+'/Users/jmok/VeracodeJavaAPI.jar'
+'-action'
+'UploadAndScan'
+'-vid'
+'dd8a37f63ef2ecdbdf6e806195007d0f'
+'-vkey'
+'ef67607ffd6ffad6e62382862d681b4cdb48aba354b16d57329c34a3cc912b3f9528c9b3423e5caa350496b52e5873629ab67137745523d7a609b31f4feb5952'
+'-criticality'
+'VeryHigh'
+'-createprofile'
+'true'
+'-version'
+'20220517-9004264'
+'-appname'
+'sca-verademo'
+'-filepath'
+'//Users//jmok//DEMO-JAVA//verademo//app//target//verademo.war'
+
+The ' characters around the executable and arguments are
+not part of the command.
+     [java] [2022.05.17 09:00:42.309] Transaction ID: [b65165f1-13d4-48dd-9b8e-c1ba8301024e]
+     [java] [2022.05.17 09:00:44.567] 
+     [java] [2022.05.17 09:00:44.567] Attempting to create a new application profile with name "sca-verademo" and criticality "Very High".
+     [java] [2022.05.17 09:00:47.126] 
+     [java] [2022.05.17 09:00:47.126] The app_id of the new application profile is "1436958".
+     [java] [2022.05.17 09:00:47.126] Waiting 5 seconds before attempting to continue.
+     [java] [2022.05.17 09:00:52.131] 
+     [java] [2022.05.17 09:00:52.131] Creating a new analysis with name "20220517-9004264".
+     [java] [2022.05.17 09:00:56.701] 
+     [java] [2022.05.17 09:00:56.701] The analysis id of the new analysis is "18485865".
+     [java] [2022.05.17 09:00:56.701] 
+     [java] [2022.05.17 09:00:56.701] Uploading: //Users//jmok//DEMO-JAVA//verademo//app//target//verademo.war
+     [java] [2022.05.17 09:01:10.314] 
+     [java] [2022.05.17 09:01:10.314] Starting pre-scan verification for application "sca-verademo" analysis "20220517-9004264".
+     [java] [2022.05.17 09:01:13.014] 
+     [java] [2022.05.17 09:01:13.014] Scan polling interval is set to the default of 120 seconds.
+     [java] [2022.05.17 09:01:13.014] 
+     [java] [2022.05.17 09:01:13.014] Application "sca-verademo" analysis "20220517-9004264" will be automatically submitted for scanning if the pre-scan verification is successful.
+UploadAndScan:  duration 31 seconds

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="maven-antrun-" default="UploadAndScan"  >
+<target name="UploadAndScan" description="Turns on debug symbols, logging. Cleans, builds, uploads binaries. Starts scan">
+  <property file="veracode.properties" prefix="veracode"/>
+  <tstamp>
+    <format property="current.time" pattern="yyyyMMdd-kmmssS"/>
+  </tstamp>
+  <record loglevel="verbose" name="veracode_${current.time}.log" append="false"/>
+  <java fork="true" jar="/Users/jmok/VeracodeJavaAPI.jar">
+    <arg line=" -action ${veracode.action} -vid ${veracode.vid} -vkey ${veracode.vkey} -criticality ${veracode.criticality}                    -createprofile ${veracode.createprofile} -version ${current.time} -appname ${veracode.appname} -filepath ${veracode.filepath}"/>
+  </java>
+</target>
+</project>

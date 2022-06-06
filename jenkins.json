@@ -1,0 +1,17 @@
+{
+  "_links": {
+    "self": {
+      "href": "https://api.veracode.com/appsec/v1/policies/?public_policy\u003dtrue\u0026name\u003djenkins{\u0026page,size,org,vendor_policy,legacy_policy_id,name_exact,category}",
+      "templated": true
+    }
+  },
+  "page": {
+    "size": 20,
+    "total_elements": 0,
+    "total_pages": 0,
+    "number": 0
+  },
+  "capabilities": [
+    "edit_policy"
+  ]
+}

@@ -1,0 +1,38 @@
+     [java] Executing '/Library/Java/JavaVirtualMachines/temurin-17.jdk/Contents/Home/bin/java' with arguments:
+'-jar'
+'/Users/jmok/VeracodeJavaAPI.jar'
+'-action'
+'UploadAndScan'
+'-vid'
+'dd8a37f63ef2ecdbdf6e806195007d0f'
+'-vkey'
+'ef67607ffd6ffad6e62382862d681b4cdb48aba354b16d57329c34a3cc912b3f9528c9b3423e5caa350496b52e5873629ab67137745523d7a609b31f4feb5952'
+'-criticality'
+'VeryHigh'
+'-createprofile'
+'true'
+'-version'
+'20220525-175002640'
+'-appname'
+'verademo_version3'
+'-filepath'
+'//Users//jmok//Verademo-jenkins//app//target//verademo.war'
+
+The ' characters around the executable and arguments are
+not part of the command.
+     [java] [2022.05.25 17:50:02.954] Transaction ID: [0d87ae91-9c93-458b-a97c-830917b5d653]
+     [java] [2022.05.25 17:50:05.357] 
+     [java] [2022.05.25 17:50:05.357] Application profile "verademo_version3" (appid=1443228) was located.
+     [java] [2022.05.25 17:50:05.358] 
+     [java] [2022.05.25 17:50:05.358] Creating a new analysis with name "20220525-175002640".
+     [java] [2022.05.25 17:50:09.862] 
+     [java] [2022.05.25 17:50:09.862] The analysis id of the new analysis is "18654676".
+     [java] [2022.05.25 17:50:09.862] 
+     [java] [2022.05.25 17:50:09.862] Uploading: //Users//jmok//Verademo-jenkins//app//target//verademo.war
+     [java] [2022.05.25 17:50:27.352] 
+     [java] [2022.05.25 17:50:27.352] Starting pre-scan verification for application "verademo_version3" analysis "20220525-175002640".
+     [java] [2022.05.25 17:50:31.235] 
+     [java] [2022.05.25 17:50:31.235] Scan polling interval is set to the default of 120 seconds.
+     [java] [2022.05.25 17:50:31.235] 
+     [java] [2022.05.25 17:50:31.235] Application "verademo_version3" analysis "20220525-175002640" will be automatically submitted for scanning if the pre-scan verification is successful.
+UploadAndScan:  duration 29 seconds
