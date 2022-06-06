@@ -6,7 +6,7 @@ pipeline {
     agent any
 
     environment {
-        VERACODE_APP_NAME = 'Verademo-pipeline'      // App Name in the Veracode Platform
+        VERACODE_APP_NAME = 'Verademo-pipeline'      
     }
 
     options {
@@ -65,16 +65,17 @@ pipeline {
                                     sh """
                                         curl -sO https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
                                         unzip pipeline-scan-LATEST.zip pipeline-scan.jar
-                                        java -jar pipeline-scan.jar --veracode_api_id '${VERACODE_API_ID}' \
-                                            --veracode_api_key '${VERACODE_API_KEY}' \
+                                        java -jar pipeline-scan.jar --veracode_api_id $VERACODE_API_ID \
+                                            --veracode_api_key $VERACODE_API_KEY \
                                             --file target/verademo.war --issue_details true
                                         """
                                 }
                                 else {
                                     powershell """
                                             curl  https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip -o pipeline-scan.zip
-                                            Expand-Archive -Force -Path pipeline-scan.zip -DestinationPath veracode_scanner                                             java -jar veracode_scanner\\pipeline-scan.jar --veracode_api_id '${VERACODE_API_ID}' \
-                                            --veracode_api_key '${VERACODE_API_KEY}' \
+                                            Expand-Archive -Force -Path pipeline-scan.zip -DestinationPath veracode_scanner   
+                                            java -jar veracode_scanner\\pipeline-scan.jar --veracode_api_id $VERACODE_API_ID \
+                                            --veracode_api_key $VERACODE_API_KEY \
                                             --file target/verademo.war --issue_details true 
                                             """
                                 }
@@ -84,7 +85,7 @@ pipeline {
                         }    
                     } 
 
-                    echo "Pipeline scan done (failures ignored, results avialable in ${WORKSPACE}/results.json)"
+                    echo "Pipeline scan done (failures ignored, results avialable in $WORKSPACE/results.json)"
             }
         }
     }
