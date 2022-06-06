@@ -6,7 +6,7 @@ pipeline {
     agent any
 
     environment {
-        VERACODE_APP_NAME = 'jenkins'      // App Name in the Veracode Platform
+        VERACODE_APP_NAME = 'Verademo-pipeline'      // App Name in the Veracode Platform
     }
 
     // this is optional on Linux, if jenkins does not have access to your locally installed docker
@@ -45,7 +45,7 @@ pipeline {
 
         stage ('Git Checkout') {
             steps {
-                git branch: 'main2', url: 'https://github.com/mokkang/Verademo-jenkins.git'
+                git branch: 'main2', url: 'https://github.com/mokkang/verademo-java.git'
             }
         }
         stage ('build') {
@@ -86,10 +86,8 @@ scanName: "Release-Candidate-${BUILD_NUMBER}", uploadExcludesPattern: '', upload
 'app/target/verademo.war', vid: "${VERACODE_API_ID}", vkey: "${VERACODE_API_KEY}"
 
                         // wait for scan to complete (timeout: x)
-                        //veracode applicationName: '${VERACODE_APP_NAME}'', criticality: 'VeryHigh', 
-debug: true, timeout: 20, fileNamePattern: '', pHost: '', pPassword: '', pUser: '', 
-replacementPattern: '', sandboxName: '', scanExcludesPattern: '', scanIncludesPattern: '', scanName: 
-"${BUILD_TAG}", uploadExcludesPattern: '', uploadIncludesPattern: 'target/verademo.war', vid: 
+                        //veracode applicationName: '${VERACODE_APP_NAME}'', criticality: 'VeryHigh', debug: true, timeout: 20, fileNamePattern: '', pHost: '', pPassword: '', pUser: '', 
+replacementPattern: '', sandboxName: '', scanExcludesPattern: '', scanIncludesPattern: '', scanName: "${BUILD_TAG}", uploadExcludesPattern: '', uploadIncludesPattern: 'target/verademo.war', vid: 
 '${VERACODE_API_ID}', vkey: '${VERACODE_API_KEY}'
                     }      
             }
@@ -106,15 +104,13 @@ replacementPattern: '', sandboxName: '', scanExcludesPattern: '', scanIncludesPa
                                 sh "curl -sSL https://download.sourceclear.com/ci.sh | sh"
 
                                 // debug, no upload
-                               //sh "curl -sSL https://download.sourceclear.com/ci.sh | DEBUG=1 sh -s 
--- scan --no-upload"
+                               //sh "curl -sSL https://download.sourceclear.com/ci.sh | DEBUG=1 sh -s -- scan --no-upload"
                             }
                             else {
                                 powershell '''
                                            Set-ExecutionPolicy AllSigned -Scope Process -Force
                                            $ProgressPreference = "silentlyContinue"
-                                           iex ((New-Object 
-System.Net.WebClient).DownloadString('https://download.srcclr.com/ci.ps1'))
+                                           iex ((New-Object System.Net.WebClient).DownloadString('https://download.srcclr.com/ci.ps1'))
                                            srcclr scan
                                            '''
                             }
