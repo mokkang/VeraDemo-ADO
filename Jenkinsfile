@@ -89,7 +89,7 @@ pipeline {
         stage ('Veracode SCA') {
             steps {
                 echo 'Veracode SCA'
-                withCredentials([ string(credentialsId: 'SCA_Token', variable: 'SRCCLR_API_TOKEN')]) 
+                withCredentials([ string(credentialsId: 'SCA_TOKEN', variable: 'SRCCLR_API_TOKEN')]) 
 {
                     withMaven(maven:'maven-3') {
                         script {
