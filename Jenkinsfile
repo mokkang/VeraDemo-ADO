@@ -50,7 +50,7 @@ pipeline {
         }
         stage ('build') {
             steps {
-                withMaven(maven:'maven-3') {
+                withMaven(maven:'latest') {
                     script {
                         if(isUnix() == true) {
                             sh 'mvn clean package'
