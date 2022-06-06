@@ -36,18 +36,7 @@ pipeline {
                 }
             }
         }
-		
-		stage ('Clean workspace') {
-            steps {
-                cleanWs()
-            }
-        }
 
-        stage ('Git Checkout') {
-            steps {
-                git branch: 'main', url: 'https://github.com/mokkang/verademo-java.git'
-            }
-        }
         stage ('build') {
             steps {
                 withMaven(maven:'maven-3') {
@@ -56,7 +45,7 @@ pipeline {
                             sh 'mvn clean package'
                         }
                         else {
-                            bat 'mvn -f app/pom.xml clean package'
+                            bat 'mvn clean package'
                         }
                     }
                 }
@@ -78,10 +67,10 @@ pipeline {
                 withCredentials([ usernamePassword ( 
                     credentialsId: 'veracode_login', usernameVariable: 'VERACODE_API_ID', passwordVariable: 'VERACODE_API_KEY') ]) {
                         // fire-and-forget 
-                        veracode applicationName: "${VERACODE_APP_NAME}", criticality: 'VeryHigh', debug: true, fileNamePattern: '', pHost: '', pPassword: '', pUser: '', replacementPattern: '', sandboxName: 'Release-Candidate-Sandbox', scanExcludesPattern: '', scanIncludesPattern: '*.war', scanName: "Release-Candidate-${BUILD_NUMBER}", uploadExcludesPattern: '', uploadIncludesPattern: 'app/target/verademo.war', vid: "${VERACODE_API_ID}", vkey: "${VERACODE_API_KEY}"
+                        veracode applicationName: "${VERACODE_APP_NAME}", criticality: 'VeryHigh', debug: true, fileNamePattern: '', pHost: '', pPassword: '', pUser: '', replacementPattern: '', sandboxName: '', scanExcludesPattern: '', scanIncludesPattern: '', scanName: "${BUILD_TAG}-${env.HOST_OS}", uploadExcludesPattern: '', uploadIncludesPattern: 'target/verademo.war', vid: "${VERACODE_API_ID}", vkey: "${VERACODE_API_KEY}"
 
                         // wait for scan to complete (timeout: x)
-                      
+                        //veracode applicationName: '${VERACODE_APP_NAME}'', criticality: 'VeryHigh', debug: true, timeout: 20, fileNamePattern: '', pHost: '', pPassword: '', pUser: '', replacementPattern: '', sandboxName: '', scanExcludesPattern: '', scanIncludesPattern: '', scanName: "${BUILD_TAG}", uploadExcludesPattern: '', uploadIncludesPattern: 'target/verademo.war', vid: '${VERACODE_API_ID}', vkey: '${VERACODE_API_KEY}'
                     }      
             }
         }
@@ -89,23 +78,22 @@ pipeline {
         stage ('Veracode SCA') {
             steps {
                 echo 'Veracode SCA'
-                withCredentials([ string(credentialsId: 'SCA_TOKEN', variable: 'SRCCLR_API_TOKEN')]) 
-{
+                withCredentials([ string(credentialsId: 'SCA_TOKEN', variable: 'SRCCLR_API_TOKEN')]) {
                     withMaven(maven:'maven-3') {
                         script {
                             if(isUnix() == true) {
                                 sh "curl -sSL https://download.sourceclear.com/ci.sh | sh"
 
                                 // debug, no upload
-                               //sh "curl -sSL https://download.sourceclear.com/ci.sh | DEBUG=1 sh -s -- scan --no-upload"
+                                //sh "curl -sSL https://download.sourceclear.com/ci.sh | DEBUG=1 sh -s -- scan --no-upload"
                             }
                             else {
                                 powershell '''
-                                           Set-ExecutionPolicy AllSigned -Scope Process -Force
-                                           $ProgressPreference = "silentlyContinue"
-                                           iex ((New-Object System.Net.WebClient).DownloadString('https://download.srcclr.com/ci.ps1'))
-                                           srcclr scan
-                                           '''
+                                            Set-ExecutionPolicy AllSigned -Scope Process -Force
+                                            $ProgressPreference = "silentlyContinue"
+                                            iex ((New-Object System.Net.WebClient).DownloadString('https://download.srcclr.com/ci.ps1'))
+                                            srcclr scan
+                                            '''
                             }
                         }
                     }
@@ -131,4 +119,3 @@ pipeline {
             }
         }
     }
-}
