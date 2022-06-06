@@ -76,14 +76,9 @@ pipeline {
 
                 echo 'Veracode scanning'
                 withCredentials([ usernamePassword ( 
-                    credentialsId: 'veracode_login', usernameVariable: 'VERACODE_API_ID', 
-passwordVariable: 'VERACODE_API_KEY') ]) {
+                    credentialsId: 'veracode_login', usernameVariable: 'VERACODE_API_ID', passwordVariable: 'VERACODE_API_KEY') ]) {
                         // fire-and-forget 
-                        veracode applicationName: "${VERACODE_APP_NAME}", criticality: 'VeryHigh', 
-debug: true, fileNamePattern: '', pHost: '', pPassword: '', pUser: '', replacementPattern: '', 
-sandboxName: 'Release-Candidate-Sandbox', scanExcludesPattern: '', scanIncludesPattern: '*.war', 
-scanName: "Release-Candidate-${BUILD_NUMBER}", uploadExcludesPattern: '', uploadIncludesPattern: 
-'app/target/verademo.war', vid: "${VERACODE_API_ID}", vkey: "${VERACODE_API_KEY}"
+                        veracode applicationName: "${VERACODE_APP_NAME}", criticality: 'VeryHigh', debug: true, fileNamePattern: '', pHost: '', pPassword: '', pUser: '', replacementPattern: '', sandboxName: 'Release-Candidate-Sandbox', scanExcludesPattern: '', scanIncludesPattern: '*.war', scanName: "Release-Candidate-${BUILD_NUMBER}", uploadExcludesPattern: '', uploadIncludesPattern: 'app/target/verademo.war', vid: "${VERACODE_API_ID}", vkey: "${VERACODE_API_KEY}"
 
                         // wait for scan to complete (timeout: x)
                       
