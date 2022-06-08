@@ -68,13 +68,9 @@ pipeline {
                     credentialsId: 'veracode_login', usernameVariable: 'VERACODE_API_ID', passwordVariable: 'VERACODE_API_KEY') ]) {
                         // fire-and-forget 
                        // veracode applicationName: "${VERACODE_APP_NAME}", criticality: 'VeryHigh', debug: true, fileNamePattern: '', pHost: '', pPassword: '', pUser: '', replacementPattern: '', sandboxName: '', scanExcludesPattern: '', scanIncludesPattern: '', scanName: "${BUILD_TAG}-${env.HOST_OS}", uploadExcludesPattern: '', uploadIncludesPattern: 'target/verademo.war', vid: "${VERACODE_API_ID}", vkey: "${VERACODE_API_KEY}"
-                        veracode applicationName: 'jenkins-pipeline', createProfile: true, 
-criticality: 'VeryHigh', debug: true, fileNamePattern: '', replacementPattern: '', sandboxName: '', 
-scanExcludesPattern: '', scanIncludesPattern: '', scanName: '', teams: '', timeout: 60, 
-uploadExcludesPattern: '', uploadIncludesPattern: '**/**.war', useIDkey: true, vid: 
-"${VERACODE_API_ID}", vkey: "${VERACODE_API_KEY}", version: '1337'
+                        veracode applicationName: 'verademo-jenkins', createProfile: true, criticality: 'VeryHigh', debug: true, fileNamePattern: '', replacementPattern: '', sandboxName: '', scanExcludesPattern: '', scanIncludesPattern: '', scanName: '', teams: '', timeout: 60, uploadExcludesPattern: '', uploadIncludesPattern: '**/**.war', useIDkey: true, vid: $VERACODE_API_ID, vkey: $VERACODE_API_KEY, version: '1337'
                         // wait for scan to complete (timeout: x)
-                        //veracode applicationName: '${VERACODE_APP_NAME}'', criticality: 'VeryHigh', debug: true, timeout: 20, fileNamePattern: '', pHost: '', pPassword: '', pUser: '', replacementPattern: '', sandboxName: '', scanExcludesPattern: '', scanIncludesPattern: '', scanName: "${BUILD_TAG}", uploadExcludesPattern: '', uploadIncludesPattern: 'target/verademo.war', vid: '${VERACODE_API_ID}', vkey: '${VERACODE_API_KEY}'
+                        
                     }      
             }
         }
@@ -86,7 +82,7 @@ uploadExcludesPattern: '', uploadIncludesPattern: '**/**.war', useIDkey: true, v
                     withMaven(maven:'maven-3') {
                         script {
                             if(isUnix() == true) {
-                                sh "curl -sSL https://download.sourceclear.com/ci.sh | sh"
+                                sh "curl -sSL https://download.sourceclear.com/ci.sh | sh "
 
                                 // debug, no upload
                                 //sh "curl -sSL https://download.sourceclear.com/ci.sh | DEBUG=1 sh -s -- scan --no-upload"
@@ -96,7 +92,7 @@ uploadExcludesPattern: '', uploadIncludesPattern: '**/**.war', useIDkey: true, v
                                             Set-ExecutionPolicy AllSigned -Scope Process -Force
                                             $ProgressPreference = "silentlyContinue"
                                             iex ((New-Object System.Net.WebClient).DownloadString('https://download.srcclr.com/ci.ps1'))
-                                            srcclr scan
+                                            srcclr scan . --allow-dirty --update-advisor
                                             '''
                             }
                         }
