@@ -59,18 +59,5 @@ steps:
     area: '$(system.teamProject)'
     addCustomTag: 'Veracode'
     flawImportLimit: '1000'
-- task: Veracode Flaw Importer@3
-  inputs:
-    ConnectionDetailsSelection: 'Endpoint'
-    AnalysisService: 'VeracodeAnalysisCenter'
-    veracodeAppProfile: 'ADO_$(system.teamProject)'
-    sandboxName: 'DailyBuild'
-    importType: 'All Unmitigated Flaws Violating Policy'
-    workItemType: 'Issue'
-    area: '$(system.teamProject)'
-    overwriteAreaPathInWorkItemsOnImport: false
-    addCustomTag: 'veracode'
-    flawImportLimit: '1000'
-
 - publish: $(System.DefaultWorkingDirectory)/results.json
   artifact: results.json
