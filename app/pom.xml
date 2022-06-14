@@ -14,7 +14,16 @@
 		<version>2.3.1.RELEASE</version>
 		<relativePath/>
 	</parent>
-
+	<repository>
+	<id>Veracode_AzureDevOps</id>
+	<url>https://pkgs.dev.azure.com/jmok/_packaging/Veracode_AzureDevOps/maven/v1</url>
+	<releases>
+		<enabled>true</enabled>
+	</releases>
+	<snapshots>
+		<enabled>true</enabled>
+	</snapshots>
+	</repository>
 	<!-- Component Version Properties -->
 	<properties>
 		<spring.version>4.3.10.RELEASE</spring.version>
