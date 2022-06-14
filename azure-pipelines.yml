@@ -34,8 +34,6 @@ steps:
   displayName: Veracode Static Scan
   inputs:
     ConnectionDetailsSelection: 'VercodeAnalysisCenter'
-    apiId: '$(VERACODE_API_ID)'
-    apiKey: '$(VERACODE_API_KEY)'
     veracodeAppProfile: 'VeraDemo'
     version: 'ADO_$(build.buildNumber)'
     filepath: '$(Build.Repository.LocalPath)/app/target/verademo.war'
