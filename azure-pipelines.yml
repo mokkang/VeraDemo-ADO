@@ -43,6 +43,9 @@ steps:
   inputs:
     ConnectionDetailsSelection: 'Endpoint'
     veracodeAppProfile: 'VeraDemo'
+    AnalysisService: 'VeracodeAnalysisCenter'
+    apiId: '$(VERACODE_API_ID)'
+    apiKey: '$(VERACODE_API_KEY)'
     version: 'ADO_$(build.buildNumber)'
     filepath: '$(Build.Repository.LocalPath)/app/target/verademo.war'
     createProfile: false
