@@ -27,17 +27,9 @@ steps:
       curl -sSO https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
       unzip -o pipeline-scan-LATEST.zip
       java -jar pipeline-scan.jar -vid $(VERACODE_API_ID) -vkey $(VERACODE_API_KEY) -f /home/vsts/work/1/s/app/target/verademo.war || true
-- publish: $(System.DefaultWorkingDirectory)/results.json
-  artifact: VeracodeBaseline
-- task: Veracode@3
-  inputs:
-    ConnectionDetailsSelection: 'Endpoint'
-    AnalysisService: 'VeracodeAnalysisCenter'
-    veracodeAppProfile: '$(system.teamProject)'
-    version: '$(build.buildNumber)'
-    filepath: '$(build.artifactstagingdirectory)'
-    createProfile: true
-    maximumWaitTime: '360'
+#- publish: $(System.DefaultWorkingDirectory)/results.json
+#  artifact: VeracodeBaseline
+
 - task: Veracode@3
   displayName: Veracode Static Scan
   inputs:
