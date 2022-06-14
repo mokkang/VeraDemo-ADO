@@ -29,11 +29,19 @@ steps:
       java -jar pipeline-scan.jar -vid $(VERACODE_API_ID) -vkey $(VERACODE_API_KEY) -f /home/vsts/work/1/s/app/target/verademo.war || true
 - publish: $(System.DefaultWorkingDirectory)/results.json
   artifact: VeracodeBaseline
-
+- task: Veracode@3
+  inputs:
+    ConnectionDetailsSelection: 'Endpoint'
+    AnalysisService: 'VeracodeAnalysisCenter'
+    veracodeAppProfile: '$(system.teamProject)'
+    version: '$(build.buildNumber)'
+    filepath: '$(build.artifactstagingdirectory)'
+    createProfile: true
+    maximumWaitTime: '360'
 - task: Veracode@3
   displayName: Veracode Static Scan
   inputs:
-    ConnectionDetailsSelection: 'VercodeAnalysisCenter'
+    ConnectionDetailsSelection: 'Endpoint'
     veracodeAppProfile: 'VeraDemo'
     version: 'ADO_$(build.buildNumber)'
     filepath: '$(Build.Repository.LocalPath)/app/target/verademo.war'
@@ -45,7 +53,8 @@ steps:
 - task: Veracode Flaw Importer@3
   displayName: Veracode Flaw Import
   inputs: 
-    ConnectionDetailsSelection: 'VeracodeAnalysisCenter'
+    ConnectionDetailsSelection: 'Endpoint'
+    AnalysisService: 'VeracodeAnalysisCenter'
     apiId: '$(VERACODE_API_ID)'
     apiKey: '$(VERACODE_API_KEY)'
     veracodeAppProfile: 'VeraDemo'
