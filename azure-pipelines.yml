@@ -30,21 +30,6 @@ steps:
 #- publish: $(System.DefaultWorkingDirectory)/results.json
 #  artifact: VeracodeBaseline
 
-- powershell: |
-   # To allow external apps and scripts to be ran.
-   Set-ExecutionPolicy AllSigned -Scope Process -Force
-   # Download and Execute the downloaded powershell script
-   $ProgressPreference = 'SilentlyContinue'
-   $Env:SRCCLR_CI_JSON=1
-   iex ((New-Object System.Net.WebClient).DownloadString('https://download.srcclr.com/ci.ps1')); srcclr scan --allow-dirty
-   # Use predefined azure pipeline variable Build.SourcesDirectory to locate your repository and scan it
-  #srcclr scan $(Build.SourcesDirectory)
-  displayName: 'Veracode SCA Agent Based Scan'
-  # don't fail for demo purposes
-  continueOnError: true
-  env:
-    SRCCLR_API_TOKEN: $(SRCCLR_API_TOKEN)
-
 
 - task: Veracode@3
   displayName: Veracode Static Scan
