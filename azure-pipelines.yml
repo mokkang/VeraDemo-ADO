@@ -44,8 +44,6 @@ steps:
     importResults: false
     failBuildOnPolicyFail: false
     
-
-
 - task: Veracode Flaw Importer@3
   displayName: Veracode Flaw Import
   inputs: 
