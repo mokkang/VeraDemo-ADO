@@ -49,7 +49,7 @@ steps:
   inputs:
     targetType: 'inline'
     script: | 
-      export SRCCLR_API_TOKEN="$(SRCCLR_API_TOKEN)"
+      export SRCCLR_API_TOKEN='$(SRCCLR_API_TOKEN)'
       export SCAN_DIR="./app"
       curl -sSL https://download.sourceclear.com/ci.sh | bash -s scan --skip-compile --update-advisor --allow-dirty
 
