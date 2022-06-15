@@ -2,17 +2,16 @@
 # Build your Java project and run tests with Apache Maven.
 # Add steps that analyze code, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/java
-
+# This is an example of using VeraDemo Java test application with the Veracode Static Pipeline scanner.  A Veracode subscription is required.
 trigger:
-- dependabot/maven/app/commons-fileupload-commons-fileupload-1.3.3
-
+- none
 pool:
-  vmImage: ubuntu-latest
-
+  vmImage: 'ubuntu-latest'
 steps:
 - task: Maven@3
+  displayName: Build with Maven
   inputs:
-    mavenPomFile: 'pom.xml'
+    mavenPomFile: 'app/pom.xml'
     mavenOptions: '-Xmx3072m'
     javaHomeOption: 'JDKVersion'
     jdkVersionOption: '1.8'
@@ -20,3 +19,59 @@ steps:
     publishJUnitResults: true
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
     goals: 'package'
+#- task: Bash@3
+#  displayName: Veracode Pipeline
+#  inputs:
+#    targetType: 'inline'
+#    script: |
+#      curl -sSO https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
+#      unzip -o pipeline-scan-LATEST.zip
+#      java -jar pipeline-scan.jar -vid $(VERACODE_API_ID) -vkey $(VERACODE_API_KEY) -f /home/vsts/work/1/s/app/target/verademo.war || true
+#- publish: $(System.DefaultWorkingDirectory)/results.json
+#  artifact: VeracodeBaseline
+
+- powershell: |
+   # To allow external apps and scripts to be ran.
+   Set-ExecutionPolicy AllSigned -Scope Process -Force
+   # Download and Execute the downloaded powershell script
+   $ProgressPreference = 'SilentlyContinue'
+   $Env:SRCCLR_CI_JSON=1
+   iex ((New-Object System.Net.WebClient).DownloadString('https://download.srcclr.com/ci.ps1')); srcclr scan --allow-dirty
+   # Use predefined azure pipeline variable Build.SourcesDirectory to locate your repository and scan it
+  # srcclr scan $(Build.SourcesDirectory)
+  displayName: 'Veracode SCA Agent Based Scan'
+# don't fail for demo purposes
+  continueOnError: true
+  env:
+    SRCCLR_API_TOKEN: $(SRCCLR_API_TOKEN)
+- task: Veracode@3
+  displayName: Veracode Static Scan
+  inputs:
+    ConnectionDetailsSelection: 'Endpoint'
+    veracodeAppProfile: 'VeraDemo'
+    AnalysisService: 'VeracodeAnalysisCenter'
+    apiId: '$(VERACODE_API_ID)'
+    apiKey: '$(VERACODE_API_KEY)'
+    version: 'ADO_$(build.buildNumber)'
+    filepath: '$(Build.Repository.LocalPath)/app/target/verademo.war'
+    createProfile: false
+    importResults: false
+    failBuildOnPolicyFail: false
+    
+
+- task: Veracode Flaw Importer@3
+  displayName: Veracode Flaw Import
+  inputs: 
+    ConnectionDetailsSelection: 'Endpoint'
+    AnalysisService: 'VeracodeAnalysisCenter'
+    apiId: '$(VERACODE_API_ID)'
+    apiKey: '$(VERACODE_API_KEY)'
+    veracodeAppProfile: 'VeraDemo'
+    sandboxName:
+    importType: 'All Unmitigated Flaws Violating Policy'
+    workItemType: 'Issue'
+    area: '$(system.teamProject)'
+    addCustomTag: 'Veracode'
+    flawImportLimit: '1000'
+- publish: $(System.DefaultWorkingDirectory)/results.json
+  artifact: results.json
