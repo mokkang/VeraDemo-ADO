@@ -1,0 +1,20 @@
+# Maven
+# Build your Java project and run tests with Apache Maven.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/java
+
+trigger:
+- none
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: Bash@3
+  displayName: Veracode SCA Scan
+  inputs:
+    targetType: 'inline'
+    script: |
+      export SRCCLR_API_TOKEN="eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzEwOTU4LCJleHAiOjE2NTcwNDAxNjYsImF1dGhvcml0aWVzIjoiQUdFTlQiLCJqdGkiOiI5NjEzOTM4Zi02OTkyLTQ2OTctYWJhNi03OWQ5ZGU3NzI4ZDciLCJjbGllbnRfaWQiOiIiLCJzY29wZSI6W119.Dp41wFNN-oTuGbA0X1q1zmvjhJmwl_TniBI6N2e3buC7SaYsxYKedNp3IEt1FFUyBRzYPxzVxRkxNBEYN2FdwE1DYn9kgRcVqqdHrxwCYFIgumLZ6A6oWoMRi7mqV1jKNg9EurT8ZFVFWPAMlKILtRuKw6qWHD3X4euy8738tfE"="$(SRCCLR_API_TOKEN"
+      export SCAN_DIR="./app"
+      curl -sSL https://download.sourceclear.com/ci.sh | bash -s scan --skip-compile --update-advisor 
