@@ -40,7 +40,7 @@ steps:
     apiKey: '$(VERACODE_API_KEY)'
     version: 'ADO_$(build.buildNumber)'
     filepath: '$(Build.Repository.LocalPath)/app/target/verademo.war'
-    createProfile: false
+    createProfile: true
     importResults: false
     failBuildOnPolicyFail: false
     
