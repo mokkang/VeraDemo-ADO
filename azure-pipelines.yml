@@ -29,3 +29,36 @@ steps:
       java -jar pipeline-scan.jar -vid $(VERACODE_API_ID) -vkey $(VERACODE_API_KEY) -f /home/vsts/work/1/s/app/target/verademo.war || true
 - publish: $(System.DefaultWorkingDirectory)/results.json
   artifact: VeracodeBaseline
+- task: VeracodePipelineScan@0
+  inputs:
+    VeracodeAPIID: '$(VERACODE_API_ID)'
+    VeracodeAPIsecret: '$(VERACODE_API_KEY)'
+    fileToScan: '$(System.DefaultWorkingDirectory)/verademo.war'
+    baselineFileGeneration: true
+    baselineFileStorageProject: 'VeraDemo'
+    baselineFileStorageReponame: 'VeraDemo'
+    baselineFileStorageBranch: 'refs/heads/azure-pipelinesSDFS'
+  
+- task: Veracode@3
+  inputs:
+    ConnectionDetailsSelection: 'Endpoint'
+    AnalysisService: 'VeracodeAnalysisCenter'
+    veracodeAppProfile: '$(system.teamProject)'
+    version: '$(build.buildNumber)'
+    filepath: '$(build.artifactstagingdirectory)'
+    sandboxName: 'NightlyBuild'
+    createProfile: true
+    importResults: true
+    maximumWaitTime: '360'
+     
+- task: Veracode Flaw Importer@3
+  inputs:
+    ConnectionDetailsSelection: 'Endpoint'
+    AnalysisService: 'VeracodeAnalysisCenter'
+    veracodeAppProfile: '$(system.teamProject)'
+    sandboxName: '$(build.buildNumber) - ADO'
+    importType: 'All Unmitigated Flaws Violating Policy'
+    workItemType: 'Issue'
+    area: '$(system.teamProject)'
+    overwriteAreaPathInWorkItemsOnImport: true
+    flawImportLimit: '1000'
