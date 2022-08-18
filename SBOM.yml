@@ -1,5 +1,5 @@
 trigger:
-- main
+- none
 pool:
   vmImage: 'ubuntu-latest'
 steps:
@@ -21,7 +21,7 @@ steps:
     script: |
       cd app
       export SRCCLR_API_TOKEN="$(SRCCLR_API_TOKEN)"
-      curl -sSL https://download.sourceclear.com/ci.sh | bash -s -- scan --skip-compile --update-advisor
+      curl -sSL https://download.sourceclear.com/ci.sh | bash -s -- scan --skip-compile --update-advisor --allow-dirty
 - task: CmdLine@2
   displayName: VC - Apply Creds
   inputs:
