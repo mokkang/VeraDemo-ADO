@@ -1,0 +1,57 @@
+trigger:
+- main
+pool:
+  vmImage: 'ubuntu-latest'
+steps:
+- task: Maven@3
+  displayName: Build with Maven
+  inputs:
+    mavenPomFile: 'app/pom.xml'
+    mavenOptions: '-Xmx3072m'
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: '1.8'
+    jdkArchitectureOption: 'x64'
+    publishJUnitResults: true
+    testResultsFiles: '**/surefire-reports/TEST-*.xml'
+    goals: 'package'
+- task: Bash@3
+  displayName: Veracode SCA scan
+  inputs:
+    targetType: 'inline'
+    script: |
+      cd app
+      export SRCCLR_API_TOKEN="$(SRCCLR_API_TOKEN)"
+      curl -sSL https://download.sourceclear.com/ci.sh | bash -s -- scan --skip-compile --update-advisor
+- task: CmdLine@2
+  displayName: VC - Apply Creds
+  inputs:
+    script: |
+      echo [default] >> credentials.txt
+      echo veracode_api_key_id = $(vid) >> credentials.txt
+      echo veracode_api_key_secret = $(vkey) >> credentials.txt
+      mkdir /home/vsts/.veracode/
+      cp credentials.txt /home/vsts/.veracode/credentials
+      ls -la
+- task: Bash@3
+  displayName: Generate SBOM - Single App
+  inputs:
+    targetType: 'inline'
+    script: |
+      # pull sbom generator from Chris Tyson's github repo
+      # a *supported SBOM generator capability is explained here:
+      # https://docs.veracode.com/r/Generate_a_Software_Bill_of_Materials_SBOM_for_Agent_Based_Scans_with_the_REST_API
+      # but I had a deadline and Chris's was quicker for me
+      git clone https://github.com/christyson/GenerateSBOM.git
+      cd GenerateSBOM
+      pip install -r requirements.txt
+      python generate_sbom.py -a verademo-ado
+      cat verademo-ado_sbom.json| python -m json.tool
+      # start replacement
+      # there was a concern about
+      # https://en.wikipedia.org/wiki/WTFPL#:~:text=As%20a%20public%20domain%20like,You%20Want%20To%20Public%20License%22
+      # aka the "do what the F you want license being published as part of the SBOM
+      # the line below replaces "SRCCLR" with "Something-else" throughout the doc and can be used to replace
+      # F-bombs/F-bomb licenses with a different string
+      # NOTE: there *may be Legal implications - please check with your Legal team before incorporating this into any pipelines
+      cat verademo-ado_sbom.json| sed 's/SRCCLR/Something-else/g' >> verademo-ado_sbom2.json
+      ls -la
