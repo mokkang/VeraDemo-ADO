@@ -20,8 +20,19 @@ steps:
     publishJUnitResults: true
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
     goals: 'package'
+
+
 - task: Bash@3
   displayName: Veracode Static Pipeline Scan
+  inputs:
+    targetType: 'inline'
+    script: | 
+      curl -sSO https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
+      unzip -o pipeline-scan-LATEST.zip
+      java -jar pipeline-scan.jar -vid $(VERACODE_API_ID) -vkey $(VERACODE_API_KEY) -f $(System.DefaultWorkingDirectory)/app/target/verademo.war || true
+      
+- task: Bash@3
+  displayName: 
   inputs:
     targetType: 'inline'
     script: |
