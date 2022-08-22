@@ -60,4 +60,5 @@ steps:
     sandboxName: 'NightlyBuild'
     createProfile: true
     importResults: true
+    failBuildIfUploadAndScanBuildStepFails: false
     maximumWaitTime: '360'
