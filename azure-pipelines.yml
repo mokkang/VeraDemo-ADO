@@ -43,7 +43,7 @@ steps:
     createProfile: true
     importResults: false
     failBuildOnPolicyFail: false
-    failBuildIfUploadAndScanBuildStepFails: false
+   # failBuildIfUploadAndScanBuildStepFails: false
     
 - task: Veracode Flaw Importer@3
   displayName: Veracode Flaw Import
