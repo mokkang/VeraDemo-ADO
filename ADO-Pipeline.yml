@@ -30,17 +30,17 @@ steps:
       curl -sSO https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
       unzip -o pipeline-scan-LATEST.zip
       java -jar pipeline-scan.jar -vid $(VERACODE_API_ID) -vkey $(VERACODE_API_KEY) -f $(System.DefaultWorkingDirectory)/app/target/verademo.war || true
-      
+
 - task: Bash@3
   displayName: 
   inputs:
     targetType: 'inline'
     script: |
       git config --global user.email "jmok@veracode.com"
-      git config --global user.name "mokkang"
+      git config --global user.name "Jin M"
       git checkout -b main
       git add results.json
       git commit -m "Updating results.json file with the results from ADO build $(build.buildNumber)"
-      git push https://$(GITHUB_PAT)@github.com/mokkang/VeraDemo-ADO.git 
+      git push https://$(GITHUB_PAT)@github.com/mokkang/verademo-github.git 
 - publish: $(System.DefaultWorkingDirectory)/results.json
   artifact: Pipeline Scan Results
