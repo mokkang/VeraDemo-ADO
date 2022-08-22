@@ -1,0 +1,35 @@
+# Maven
+# Build your Java project and run tests with Apache Maven.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/java
+
+trigger:
+- none
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- task: Maven@3
+  inputs:
+    mavenPomFile: 'pom.xml'
+    mavenOptions: '-Xmx3072m'
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: '1.8'
+    jdkArchitectureOption: 'x64'
+    publishJUnitResults: true
+    testResultsFiles: '**/surefire-reports/TEST-*.xml'
+    goals: 'package'
+- task: Bash@3
+  displayName: Veracode Static Pipeline Scan
+  inputs:
+    targetType: 'inline'
+    script: |
+      git config --global user.email "jmok@veracode.com"
+      git config --global user.name "mokkang"
+      git checkout -b main
+      git add results.json
+      git commit -m "Updating results.json file with the results from ADO build $(build.buildNumber)"
+      git push https://$(GITHUB_PAT)@github.com/mokkang/VeraDemo-ADO.git 
+- publish: $(System.DefaultWorkingDirectory)/results.json
+  artifact: Pipeline Scan Results
