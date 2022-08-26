@@ -5,25 +5,85 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
-steps:
+stages:
+- stage: Build
+  jobs:
+  - job: Maven_Build
+  steps:
+  - task: Maven@3
+    inputs:
+      mavenPomFile: 'app/pom.xml'
+      mavenOptions: '-Xmx3072m'
+      javaHomeOption: 'JDKVersion'
+      jdkVersionOption: '1.8'
+      jdkArchitectureOption: 'x64'
+      publishJUnitResults: true
+      testResultsFiles: '**/surefire-reports/TEST-*.xml'
+      goals: '-X package'
+      #Save Artifact for Next Step in the Pipeline
+  - task: PublishPipelineArtifact@1
+    displayName: 'Build Artifact for Scans'
+    inputs:
+      targetPath: '$(System.DefaultWorkingDirectory)/app/target/verademo.war'
+      artifactName: 'verademo.war'
 
-- task: Bash@3
-  displayName: Veracode SCA scan
-  inputs:
-    targetType: 'inline'
-    script: | 
-      export SRCCLR_API_TOKEN="$(SRCCLR_API_TOKEN)"
-      export SCAN_DIR="./app"
-      curl -sSL https://download.sourceclear.com/ci.sh | bash -s scan --skip-compile --update-advisor --allow-dirty
+  - stage: Security Scans
+    displayName: 'Security Testing'
+    jobs:
+    - job: Software Composition Analysis
+      displayName: Software Composition Analysis
+      steps:
+      - task: Bash@3
+        displayName: Veracode SCA scan
+        inputs:
+          targetType: 'inline'
+          script: | 
+            export SRCCLR_API_TOKEN="$(SRCCLR_API_TOKEN)"
+            export SCAN_DIR="./app"
+            curl -sSL https://download.sourceclear.com/ci.sh | bash -s scan --skip-compile --update-advisor --allow-dirty
+  - job: Static Analysis
+    displayName: Veracode Static Analysis
+    steps:
+    - task: DownloadPipelineArtifact@2
+      inputs:
+        source: 'current'
+        artifactName: 'verademo.war'
+    - template: sast-scan.yml@veracodetemplates
+      parameters:
+        sandbox: eq(variables['Build.SourceBranch'], 'refs/heads/feature')
+        policy: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+        buildNumber: $(build.buildNumber)
+        pipelineWorkspace: $(Pipeline.Workspace)
+        VeracodeAppName: 'VeraDemo-ADO'
+  - job: Flaw Importing
+    displayName: Veracode Flaw Importer
+    steps:
+    - task: Veracode Flaw Importer@3
+      displayName: Veracode Flaw Import
+        ConnectionDetailsSelection: 'Endpoint'
+        AnalysisService: 'VeracodeAnalysisCenter'
+        veracodeAppProfile: 'VeraDemo-ADO'
+        sandboxName: 'Release-Candidate'
+        importType: 'All Unmitigated Flaws Violating Policy'
+        workItemType: 'Issue'
+        area: '$(system.teamProject)'
+        overwriteAreaPathInWorkItemsOnImport: true
+        flawImportLimit: '1000'
 
-- task: Veracode Flaw Importer@3
-  inputs:
-    ConnectionDetailsSelection: 'Endpoint'
-    AnalysisService: 'VeracodeAnalysisCenter'
-    veracodeAppProfile: '$(system.teamProject)'
-    sandboxName: 
-    importType: 'All Unmitigated Flaws Violating Policy'
-    workItemType: 'Issue'
-    area: '$(system.teamProject)'
-    overwriteAreaPathInWorkItemsOnImport: true
-    flawImportLimit: '1000'
+
+
+
+
+
+
+#- task: Veracode Flaw Importer@3
+#  inputs:
+#    ConnectionDetailsSelection: 'Endpoint'
+#    AnalysisService: 'VeracodeAnalysisCenter'
+#    veracodeAppProfile: '$(system.teamProject)'
+#    sandboxName: 
+#    importType: 'All Unmitigated Flaws Violating Policy'
+#    workItemType: 'Issue'
+#    area: '$(system.teamProject)'
+#    overwriteAreaPathInWorkItemsOnImport: true
+#    flawImportLimit: '1000'
