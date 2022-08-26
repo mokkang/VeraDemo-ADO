@@ -54,7 +54,7 @@ stages:
         policy: eq(variables['Build.SourceBranch'], 'refs/heads/master')
         buildNumber: $(build.buildNumber)
         pipelineWorkspace: $(Pipeline.Workspace)
-        VeracodeAppName: 'VeraDemo-ADO'
+        VeracodeAppName: 'VeraDemo'
   - job: Flaw Importing
     displayName: Veracode Flaw Importer
     steps:
@@ -62,7 +62,7 @@ stages:
       displayName: Veracode Flaw Import
         ConnectionDetailsSelection: 'Endpoint'
         AnalysisService: 'VeracodeAnalysisCenter'
-        veracodeAppProfile: 'VeraDemo-ADO'
+        veracodeAppProfile: 'VeraDemo'
         sandboxName: 'Release-Candidate'
         importType: 'All Unmitigated Flaws Violating Policy'
         workItemType: 'Issue'
