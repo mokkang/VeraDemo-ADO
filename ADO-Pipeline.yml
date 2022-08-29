@@ -41,6 +41,6 @@ steps:
       git checkout -b main
       git add results.json
       git commit -m "Updating results.json file with the results from ADO build $(build.buildNumber)"
-      git push https://$(GITHUB_PAT)@github.com/mokkang/verademo-github.git 
+      git push https://$(GITHUB_PAT)@github.com/mokkang/github-verademo.git 
 - publish: $(System.DefaultWorkingDirectory)/results.json
   artifact: Pipeline Scan Results
