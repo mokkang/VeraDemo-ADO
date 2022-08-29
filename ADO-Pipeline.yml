@@ -37,7 +37,7 @@ steps:
     targetType: 'inline'
     script: |
       git config --global user.email "jmok@veracode.com"
-      git config --global user.name "Jin M"
+      git config --global user.name "Jin Mok"
       git checkout -b main
       git add results.json
       git commit -m "Updating results.json file with the results from ADO build $(build.buildNumber)"
