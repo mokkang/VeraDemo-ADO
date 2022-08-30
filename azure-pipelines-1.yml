@@ -56,7 +56,7 @@ steps:
     version: 'ADO_$(build.buildNumber)'
     filepath: '$(Build.Repository.LocalPath)/app/target/verademo.war'
     createProfile: false
-    importResults: false
+    importResults: true
     failBuildOnPolicyFail: false
     
 
