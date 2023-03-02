@@ -1,0 +1,74 @@
+# ASP.NET Core (.NET Framework)
+# Build and test ASP.NET Core projects targeting the full .NET Framework.
+# Add steps that publish symbols, save build artifacts, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+- none
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Debug'
+
+steps:
+- task: NuGetToolInstaller@1
+
+- task: NuGetCommand@2
+  inputs:
+    restoreSolution: '$(solution)'
+
+- task: VSBuild@1
+  inputs:
+    solution: '$(solution)'
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+
+- task: VSTest@2
+  inputs:
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+
+- task: PublishBuildArtifacts@1
+  displayName: Create Build Artifact for Veracode Pipeline Scan Results
+  inputs:
+    PathtoPublish: $(build.artifactStagingDirectory)
+    ArtifactName: "verademo"
+    #publishLocation: 
+    TargetPath: '$(build.artifactStagingDirectory)\WebApp.zip'
+
+#- task: ArchiveFiles@2
+#  inputs:
+#    rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/web_comp'
+#    includeRootFolder: false
+#    archiveType: 'zip'
+#    archiveFile: '$(Build.ArtifactStagingDirectory)'
+#    replaceExistingArchive: true
+
+#- task: CopyFiles@2
+#  inputs:
+#    SourceFolder: '$(build.artifactstagingdirectory)'
+#    Contents: |
+#      **\!
+#      (*.svg|*.jpg|*.cs|*.png|*.gif|*.pdf|*.aspx|*.cshtml|*.htm|*.css|*.ttf|*.woff|*.woff2|*.eot|*.js|*.resx|*.xls|*.xlsx|*.docx|*.exclude|*.txt|*.cache|*.edmx|*.csdl|*.msl|*.xml|*.resources|*.datasource|*.config|*.dlsco|*.ascx|*.html|*.json|*.php|*.side)
+#    TargetFolder: '$(build.artifactstagingdirectory)/web_comp.zip'
+#    CleanTargetFolder: true
+#    OverWrite: true
+#    ignoreMakeDirErrors: true
+- task: VeracodePipelineScan@0
+  inputs:
+    VeracodeAPIID: '$(VERACODE_API_ID)'
+    VeracodeAPIsecret: '$(VERACODE_API_KEY)'
+    fileToScan: '$(System.DefaultWorkingDirectory)/WebApp.zip'
+- task: CmdLine@2
+  displayName: Veracode Pipeline Scan
+  inputs:
+    script: |
+      curl -sSO https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
+      unzip -o pipeline-scan-LATEST.zip
+      java -jar pipeline-scan.jar -vid $(VERACODE_API_ID) -vkey $(VERACODE_API_KEY) -f $(Build.ArtifactStagingDirectory)/WebApp.zip --issue_details true || true
+  
